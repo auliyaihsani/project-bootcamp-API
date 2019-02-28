@@ -28,16 +28,16 @@ module.exports = (sequelize, type )=>{
         },
         batch_id:{
             field:'batch_id',
-            type: type.INTEGER
+            type: type.INTEGER,
+            references:{
+                model:'Bootcamp_batch',
+                key: 'batch_id'
+            }
         },
         active_flag:{
             field:'active_flag',
             type: type.ENUM('1', '0'),
-
-            references:{
-                model:'bootcamp_batch',
-                key: 'batch_id'
-            }
+            defaultValue : "1"
         }
     },{
         tableName: 'trainee',

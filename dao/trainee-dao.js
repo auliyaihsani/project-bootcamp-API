@@ -1,12 +1,14 @@
 const {
     Bootcamp_batch,
-    Trainee
+    trainee
 
 } = require('../db/sequelize');
 var logger = require('../util/logging/winston-logger');
 
-exports.getById = function getById(trainee_id, callback) {
-    Trainee.findById(trainee_id)
+exports.getById = function getById(id, callback) {
+    trainee.findById(id, {
+        include : Bootcamp_batch
+    })
     .then((trainee) => {
         return callback(null, trainee)
     }).catch((err) => {
@@ -16,8 +18,8 @@ exports.getById = function getById(trainee_id, callback) {
 }
 
 exports.getAll = function getAll(callback) {
-    Trainee.findAll({
-        include: [Bootcamp_batch]
+    trainee.findAll({
+        include : Bootcamp_batch
     })
     .then((trainees) => {
         return callback(null, trainees)
@@ -29,16 +31,16 @@ exports.getAll = function getAll(callback) {
 
 
 exports.inserttrainee = function inserttrainee(data, callback) {
-    let trainee = data;
-    if (trainee.bootcamp_batch == null & trainee.batch_id ==null) {
+    let trainees = data;
+    if (trainees.bootcamp_batch == null & trainees.batch_id ==null) {
         resizeBy.json("trainee kosong");
     } else {
-        if (trainee.batch_id ==null) {
-            trainee.batch_id = trainee.bootcamp_batch.batch_id;
+        if (trainees.batch_id ==null) {
+            trainees.batch_id = trainees.bootcamp_batch.batch_id;
         }
     }
 
-    Trainee.create(trainee)
+    trainee.create(trainees)
     .then((trainee) => {
         return callback(null, trainee)
     }).catch((err) => {
@@ -50,16 +52,15 @@ exports.inserttrainee = function inserttrainee(data, callback) {
 
 
 exports.updatetrainee = function updatetrainee(trainee_id, data, callback) {
-    let trainee = data;
-    if (trainee.bootcamp_batch == null && trainee.trainee_id ==null) {
+    let trainees = data;
+    if (trainees.bootcamp_batch == null && trainees.trainee_id ==null) {
         res.json("trainee kosong")
     } else {
-        if (trainee.trainee_id == null) {
-            trainee.trainee_id = trainee.bootcamp_batch.batch_id;
+        if (trainees.trainee_id == null) {
+            trainees.trainee_id = trainees.bootcamp_batch.batch_id;
         }
     }
 
-    
     trainee.update(data, {
         where:{
             trainee_id:data.trainee_id
@@ -79,8 +80,22 @@ exports.updatetrainee = function updatetrainee(trainee_id, data, callback) {
 }
 
 
-
-
+exports.del = function del(trainee_id, callback) {
+    trainee.destroy({
+            where: {
+                trainee_id: trainee_id
+            }
+        })
+        .then(result => {
+            logger.info('result  update:');
+            logger.info(result);
+            return callback(null, trainee_id);
+        })
+        .catch((error) => {
+            logger.error(error);
+            return callback(error);
+        })
+};
 
 
 

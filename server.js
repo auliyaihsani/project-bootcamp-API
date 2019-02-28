@@ -40,6 +40,9 @@ study_materialRoute(app);
 var trainerRoute = require('./routes/routes-trainer');
 trainerRoute(app);
 
+var traineeRoute = require('./routes/routes-trainee');
+traineeRoute(app);
+
 var studyperiodRoute = require('./routes/routes-study_period');
 studyperiodRoute(app);
 

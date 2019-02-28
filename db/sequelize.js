@@ -3,7 +3,7 @@ const bootcamp_batchModel= require('../model/bootcamp_batch')
 const study_materialModel= require('../model/study_material')
 const trainerModel = require('../model/trainer')
 const study_periodModel = require('../model/study_period')
-const trainee = require('../model/trainee')
+const traineeModel = require('../model/trainee')
 
 const sequelize = new Sequelize('bootcamp', 'root', '', {
     host: 'localhost',
@@ -22,6 +22,7 @@ const study_material = study_materialModel(sequelize, Sequelize)
 const trainer = trainerModel (sequelize, Sequelize)
 const studyperiod = study_periodModel(sequelize, Sequelize)
 const trainee = traineeModel( sequelize, Sequelize)
+trainee.belongsTo(Bootcamp_batch, {foreignKey : "batch_id"})
 
 module.exports = {
     Bootcamp_batch,
